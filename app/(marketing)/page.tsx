@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { HomeHero } from "@/components/sections/HomeHero";
 import { DivisionPanels } from "@/components/sections/DivisionPanels";
-import { TheLoop } from "@/components/sections/TheLoop";
+import { FeedbackLoopGears } from "@/components/sections/FeedbackLoopGears";
 import { RecentWork } from "@/components/sections/RecentWork";
 import { Manifesto } from "@/components/sections/Manifesto";
 import { HomeCTA } from "@/components/sections/HomeCTA";
@@ -50,7 +50,7 @@ export default function HomePage() {
       />
       <HomeHero />
       <DivisionPanels />
-      <TheLoop />
+      <FeedbackLoopGears />
       <RecentWork />
       <Manifesto />
       <HomeCTA />

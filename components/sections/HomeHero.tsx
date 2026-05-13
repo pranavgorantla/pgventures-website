@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { HeroVisual } from "@/components/sections/HeroVisual";
+import { HeroVisualConvergence } from "@/components/sections/HeroVisualConvergence";
 
 const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
@@ -40,11 +40,11 @@ export function HomeHero() {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div className="text-center lg:text-left">
+      <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div className="text-center md:text-left">
           {/* Headline — each word slides up independently */}
           <h1 className="text-5xl sm:text-7xl md:text-8xl font-semibold tracking-tight leading-none mb-6">
-            <span className="inline-flex flex-wrap gap-x-[0.25em] justify-center lg:justify-start items-baseline">
+            <span className="inline-flex flex-wrap gap-x-[0.25em] justify-center md:justify-start items-baseline">
               {/* "Build" — 0ms */}
               <motion.span className="inline-block" {...enter(0)}>
                 <AccentWord word="Build" color="tech" underlineDelay={0.6} />
@@ -72,7 +72,7 @@ export function HomeHero() {
           </motion.div>
 
           {/* CTAs — 1200ms */}
-          <motion.div {...enter(1.2, 0.4)} className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+          <motion.div {...enter(1.2, 0.4)} className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
             <Button href="#divisions" size="lg" variant="primary">
               Explore the Venture
             </Button>
@@ -80,11 +80,18 @@ export function HomeHero() {
               Work With Us
             </Button>
           </motion.div>
+
+          {/* Mobile visual — stacks below CTAs, hidden on md+ */}
+          <motion.div {...enter(1.4, 0.5)} className="md:hidden mt-12 flex justify-center">
+            <div className="w-full max-w-[280px]">
+              <HeroVisualConvergence delay={0.5} />
+            </div>
+          </motion.div>
         </div>
 
-        {/* HeroVisual — hidden on mobile, shown on lg+ */}
-        <div className="hidden lg:flex items-center justify-center">
-          <HeroVisual />
+        {/* Desktop/tablet visual — hidden on mobile */}
+        <div className="hidden md:flex items-center justify-center">
+          <HeroVisualConvergence />
         </div>
 
         {/* Scroll indicator */}

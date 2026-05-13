@@ -51,7 +51,7 @@ export function Header() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" aria-label="PG Ventures home">
-              <Logo variant={logoVariant} height={32} />
+              <Logo variant={logoVariant} className="h-9 md:h-10" />
             </Link>
 
             {/* Desktop Nav */}

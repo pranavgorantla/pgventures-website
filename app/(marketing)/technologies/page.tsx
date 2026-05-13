@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { FadeIn, FadeInStagger, FadeInItem } from "@/components/motion/FadeIn";
 import { Button } from "@/components/ui/Button";
+import { TechnologiesHeroVisual } from "@/components/sections/TechnologiesHeroVisual";
 import { SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -43,29 +44,43 @@ export default function TechnologiesPage() {
     <>
       {/* Hero */}
       <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <FadeIn>
-          <div className="flex items-center gap-3 mb-8">
-            <span className="h-[3px] w-8 rounded-full bg-tech" aria-hidden="true" />
-            <span className="text-xs font-medium uppercase tracking-widest text-tech">
-              PG Technologies
-            </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          <FadeIn>
+            <div className="flex items-center gap-3 mb-8">
+              <span className="h-[3px] w-8 rounded-full bg-tech" aria-hidden="true" />
+              <span className="text-xs font-medium uppercase tracking-widest text-tech">
+                PG Technologies
+              </span>
+            </div>
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight leading-none mb-6 max-w-3xl">
+              Build systems that scale.
+            </h1>
+            <p className="text-xl text-[var(--muted-fg)] max-w-2xl mb-10 leading-relaxed">
+              We design and develop software, automation tools, and intelligent
+              systems built for real-world use.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button href="#what-we-build" size="lg" variant="tech">
+                Explore Our Technology
+              </Button>
+              <Button href="/contact?team=technologies" size="lg" variant="secondary">
+                Join the Build
+              </Button>
+            </div>
+
+            {/* Mobile visual — stacks below CTAs, hidden on md+ */}
+            <div className="md:hidden mt-10 flex justify-center">
+              <div className="w-full max-w-[280px]">
+                <TechnologiesHeroVisual delay={0.4} />
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* Desktop/tablet visual */}
+          <div className="hidden md:flex items-center justify-center">
+            <TechnologiesHeroVisual />
           </div>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight leading-none mb-6 max-w-3xl">
-            Build systems that scale.
-          </h1>
-          <p className="text-xl text-[var(--muted-fg)] max-w-2xl mb-10 leading-relaxed">
-            We design and develop software, automation tools, and intelligent
-            systems built for real-world use.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button href="#what-we-build" size="lg" variant="tech">
-              Explore Our Technology
-            </Button>
-            <Button href="/contact?team=technologies" size="lg" variant="secondary">
-              Join the Build
-            </Button>
-          </div>
-        </FadeIn>
+        </div>
       </section>
 
       {/* Positioning */}

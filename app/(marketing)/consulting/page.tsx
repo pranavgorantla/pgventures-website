@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { PlatformLogos } from "@/components/sections/PlatformLogos";
 import { EngagementModels } from "@/components/sections/EngagementModels";
+import { ConsultingHeroVisual } from "@/components/sections/ConsultingHeroVisual";
 import { SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -62,24 +63,38 @@ export default function ConsultingPage() {
     <>
       {/* Hero */}
       <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <FadeIn>
-          <div className="flex items-center gap-3 mb-8">
-            <span className="h-[3px] w-8 rounded-full bg-consulting" aria-hidden="true" />
-            <span className="text-xs font-medium uppercase tracking-widest text-consulting">
-              PG Consulting
-            </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          <FadeIn>
+            <div className="flex items-center gap-3 mb-8">
+              <span className="h-[3px] w-8 rounded-full bg-consulting" aria-hidden="true" />
+              <span className="text-xs font-medium uppercase tracking-widest text-consulting">
+                PG Consulting
+              </span>
+            </div>
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight leading-none mb-6 max-w-4xl">
+              Fix your systems. Automate your workflows. Scale your business.
+            </h1>
+            <p className="text-xl text-[var(--muted-fg)] max-w-2xl mb-10 leading-relaxed">
+              We partner with companies to design, implement, and optimize the systems
+              they rely on.
+            </p>
+            <Button href="#contact" size="lg" variant="consulting">
+              Start a Project
+            </Button>
+
+            {/* Mobile visual — stacks below CTA, hidden on md+ */}
+            <div className="md:hidden mt-10 flex justify-center">
+              <div className="w-full max-w-[280px]">
+                <ConsultingHeroVisual delay={0.4} />
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* Desktop/tablet visual */}
+          <div className="hidden md:flex items-center justify-center">
+            <ConsultingHeroVisual />
           </div>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight leading-none mb-6 max-w-4xl">
-            Fix your systems. Automate your workflows. Scale your business.
-          </h1>
-          <p className="text-xl text-[var(--muted-fg)] max-w-2xl mb-10 leading-relaxed">
-            We partner with companies to design, implement, and optimize the systems
-            they rely on.
-          </p>
-          <Button href="#contact" size="lg" variant="consulting">
-            Start a Project
-          </Button>
-        </FadeIn>
+        </div>
       </section>
 
       {/* Problem */}
