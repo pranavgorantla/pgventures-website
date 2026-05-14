@@ -49,9 +49,18 @@ export function Header() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href="/" aria-label="PG Ventures home">
-              <Logo variant={logoVariant} className="h-9 md:h-10" />
+            {/* Logo — links home from any division */}
+            <Link
+              href="/"
+              aria-label={
+                logoVariant === "technologies"
+                  ? "PG Technologies — return to PG Ventures homepage"
+                  : logoVariant === "consulting"
+                  ? "PG Consulting — return to PG Ventures homepage"
+                  : "PG Ventures — return to homepage"
+              }
+            >
+              <Logo variant={logoVariant} className="h-9 md:h-11" />
             </Link>
 
             {/* Desktop Nav */}
