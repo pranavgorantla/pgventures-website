@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { HeroVisualConvergence } from "@/components/sections/HeroVisualConvergence";
+import { HeroParticleConvergence } from "@/components/sections/HeroParticleConvergence";
 
 const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
@@ -84,14 +84,14 @@ export function HomeHero() {
           {/* Mobile visual — stacks below CTAs, hidden on md+ */}
           <motion.div {...enter(1.4, 0.5)} className="md:hidden mt-12 flex justify-center">
             <div className="w-full max-w-[280px]">
-              <HeroVisualConvergence delay={0.5} />
+              <HeroParticleConvergence delay={0.5} />
             </div>
           </motion.div>
         </div>
 
         {/* Desktop/tablet visual — hidden on mobile */}
         <div className="hidden md:flex items-center justify-center">
-          <HeroVisualConvergence />
+          <HeroParticleConvergence />
         </div>
 
         {/* Scroll indicator */}
