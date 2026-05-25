@@ -42,7 +42,7 @@ const FOCUS_AREAS = [
 export default function TechnologiesPage() {
   return (
     <>
-      {/* Hero */}
+      {/* Hero — page background */}
       <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <FadeIn>
@@ -67,42 +67,40 @@ export default function TechnologiesPage() {
                 Join the Build
               </Button>
             </div>
-
-            {/* Mobile visual — stacks below CTAs, hidden on md+ */}
             <div className="md:hidden mt-10 flex justify-center">
               <div className="w-full max-w-[280px]">
                 <TechnologiesHeroVisual delay={0.4} />
               </div>
             </div>
           </FadeIn>
-
-          {/* Desktop/tablet visual */}
           <div className="hidden md:flex items-center justify-center">
             <TechnologiesHeroVisual />
           </div>
         </div>
       </section>
 
-      {/* Positioning */}
-      <section className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <FadeIn>
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
-              Not just ideas.{" "}
-              <span className="text-[var(--muted-fg)]">Systems that work.</span>
-            </h2>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <p className="text-[var(--muted-fg)] leading-relaxed text-lg">
-              PG Technologies focuses on building practical, scalable systems —
-              from internal tools to intelligent platforms. Everything we develop
-              is designed to solve real problems and operate in real environments.
-            </p>
-          </FadeIn>
+      {/* Positioning — tinted */}
+      <div className="section-tinted border-t border-[var(--border)]">
+        <div className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <FadeIn>
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+                Not just ideas.{" "}
+                <span className="text-[var(--muted-fg)]">Systems that work.</span>
+              </h2>
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              <p className="text-[var(--muted-fg)] leading-relaxed text-lg">
+                PG Technologies focuses on building practical, scalable systems —
+                from internal tools to intelligent platforms. Everything we develop
+                is designed to solve real problems and operate in real environments.
+              </p>
+            </FadeIn>
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* What We're Building */}
+      {/* What We're Building — page background */}
       <section
         id="what-we-build"
         className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
@@ -115,53 +113,48 @@ export default function TechnologiesPage() {
             What we&apos;re building
           </h2>
         </FadeIn>
-
         <FadeInStagger className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[var(--border)] rounded-xl overflow-hidden">
           {SERVICES.map((service) => (
             <FadeInItem key={service.title}>
               <div className="bg-[var(--background)] p-8 h-full">
                 <div className="w-1.5 h-1.5 rounded-full bg-tech mb-6" aria-hidden="true" />
                 <h3 className="font-semibold tracking-tight mb-3">{service.title}</h3>
-                <p className="text-sm text-[var(--muted-fg)] leading-relaxed">
-                  {service.description}
-                </p>
+                <p className="text-sm text-[var(--muted-fg)] leading-relaxed">{service.description}</p>
               </div>
             </FadeInItem>
           ))}
         </FadeInStagger>
       </section>
 
-      {/* R&D Focus */}
-      <section className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <FadeIn>
-            <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted-fg)] mb-3">
-              R&D
-            </p>
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-6">
-              Areas of focus
-            </h2>
-            <p className="text-[var(--muted-fg)] leading-relaxed">
-              We invest in building systems that sit at the intersection of data,
-              automation, and intelligence.
-            </p>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <div className="flex flex-wrap gap-2">
-              {FOCUS_AREAS.map((area) => (
-                <span
-                  key={area}
-                  className="px-3 py-1.5 text-sm border border-[var(--border)] rounded-full text-[var(--muted-fg)] hover:border-tech hover:text-tech transition-colors"
-                >
-                  {area}
-                </span>
-              ))}
-            </div>
-          </FadeIn>
+      {/* R&D Focus — tinted */}
+      <div className="section-tinted border-t border-[var(--border)]">
+        <div className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <FadeIn>
+              <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted-fg)] mb-3">R&amp;D</p>
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-6">Areas of focus</h2>
+              <p className="text-[var(--muted-fg)] leading-relaxed">
+                We invest in building systems that sit at the intersection of data,
+                automation, and intelligence.
+              </p>
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              <div className="flex flex-wrap gap-2">
+                {FOCUS_AREAS.map((area) => (
+                  <span
+                    key={area}
+                    className="px-3 py-1.5 text-sm border border-[var(--border)] rounded-full text-[var(--muted-fg)] hover:border-tech hover:text-tech transition-colors"
+                  >
+                    {area}
+                  </span>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* Connection to Consulting */}
+      {/* Connection to Consulting — page background */}
       <section className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <FadeIn>
           <div className="border border-[var(--border)] rounded-xl p-10 md:p-16">
@@ -183,24 +176,26 @@ export default function TechnologiesPage() {
         </FadeIn>
       </section>
 
-      {/* Vision */}
-      <section className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <FadeIn className="max-w-3xl">
-          <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted-fg)] mb-4">
-            Vision
-          </p>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-4">
-            Designed for long-term scale
-          </h2>
-          <p className="text-[var(--muted-fg)] leading-relaxed text-lg">
-            We&apos;re building systems and tools that can grow beyond individual use
-            cases — products that can be expanded, reused, and scaled across
-            industries.
-          </p>
-        </FadeIn>
-      </section>
+      {/* Vision — tinted */}
+      <div className="section-tinted border-t border-[var(--border)]">
+        <div className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <FadeIn className="max-w-3xl">
+            <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted-fg)] mb-4">
+              Vision
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-4">
+              Designed for long-term scale
+            </h2>
+            <p className="text-[var(--muted-fg)] leading-relaxed text-lg">
+              We&apos;re building systems and tools that can grow beyond individual use
+              cases — products that can be expanded, reused, and scaled across
+              industries.
+            </p>
+          </FadeIn>
+        </div>
+      </div>
 
-      {/* Coming Soon */}
+      {/* Coming Soon — page background */}
       <section className="border-t border-[var(--border)] py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <FadeIn>
           <div className="flex items-center gap-4">
@@ -212,25 +207,27 @@ export default function TechnologiesPage() {
         </FadeIn>
       </section>
 
-      {/* Final CTA */}
-      <section className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <FadeIn className="text-center">
-          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
-            Want to build something with us?
-          </h2>
-          <p className="text-[var(--muted-fg)] mb-10 text-lg">
-            We&apos;re building systems that matter. Join us.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button href="/contact?team=technologies" size="lg" variant="tech">
-              Join the Build
-            </Button>
-            <Button href="#what-we-build" size="lg" variant="secondary">
-              Explore Our Technology
-            </Button>
-          </div>
-        </FadeIn>
-      </section>
+      {/* Final CTA — tinted */}
+      <div className="section-tinted border-t border-[var(--border)]">
+        <div className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <FadeIn className="text-center">
+            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
+              Want to build something with us?
+            </h2>
+            <p className="text-[var(--muted-fg)] mb-10 text-lg">
+              We&apos;re building systems that matter. Join us.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button href="/contact?team=technologies" size="lg" variant="tech">
+                Join the Build
+              </Button>
+              <Button href="#what-we-build" size="lg" variant="secondary">
+                Explore Our Technology
+              </Button>
+            </div>
+          </FadeIn>
+        </div>
+      </div>
     </>
   );
 }

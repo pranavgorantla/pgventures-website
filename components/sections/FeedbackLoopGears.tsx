@@ -4,112 +4,79 @@ import { useEffect, useState, useRef, useMemo } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { FadeIn } from "@/components/motion/FadeIn";
 
-// ---------------------------------------------------------------------------
-// Gear geometry helpers
-// ---------------------------------------------------------------------------
-// Module m=10 → pitch_r = N*m/2, addendum=10, dedendum=10
-// Gear 1 (consulting, 12 teeth): pitch=60, outer=70, root=50
-// Gear 2 (tech, 8 teeth):        pitch=40, outer=50, root=30
-// Center distance: 60+40=100
+// ── Gear geometry ──────────────────────────────────────────────────────────────
+// Module m=10: pitch_r = N*m/2, addendum=10, dedendum=10
+// G1 (consulting, 12 teeth): pitch=60, outer=70, root=50
+// G2 (tech, 8 teeth):        pitch=40, outer=50, root=30
+// Center distance: 60+40=100 → correctly meshing
+const G1 = { cx: 90,  cy: 112, N: 12, rOuter: 70, rRoot: 50, rHub: 14, rRing: 57 };
+const G2 = { cx: 190, cy: 112, N: 8,  rOuter: 50, rRoot: 30, rHub: 10, rRing: 40 };
 
-const G1 = { cx: 93, cy: 108, N: 12, rOuter: 70, rRoot: 50, rHub: 16, rRing: 57 };
-const G2 = { cx: 193, cy: 108, N: 8,  rOuter: 50, rRoot: 30, rHub: 11, rRing: 38 };
+const G1_OFFSET = Math.PI / G1.N;
+const G2_OFFSET = Math.PI / G2.N;
 
-// Offset angles chosen so G1 has a gap at 0° (toward G2) and G2 has a tooth at 180° (toward G1)
-const G1_OFFSET = Math.PI / G1.N;          // = π/12 → gap centered at 0°
-const G2_OFFSET = Math.PI / G2.N;          // = π/8  → tooth centered at 180° (gap between tooth 3&4 is at π)
-
-/** Generate SVG path for a simplified spur gear (straight-sided teeth). */
+/** Spur-gear SVG path with bold 0.48-ratio teeth */
 function gearPath(
-  cx: number,
-  cy: number,
-  N: number,
-  rOuter: number,
-  rRoot: number,
-  offset: number
+  cx: number, cy: number,
+  N: number, rOuter: number, rRoot: number,
+  offset: number,
 ): string {
   const pts: string[] = [];
-  const pitch = (2 * Math.PI) / N;
-  const toothHalf = pitch * 0.25; // 50% tooth, 50% gap
+  const pitch     = (2 * Math.PI) / N;
+  const toothHalf = pitch * 0.48;
 
   for (let i = 0; i < N; i++) {
-    const tc = (i / N) * 2 * Math.PI + offset;
+    const tc        = (i / N) * 2 * Math.PI + offset;
     const gapStart  = tc - pitch / 2;
     const rootLeft  = tc - toothHalf;
     const rootRight = tc + toothHalf;
+    const p = (r: number, a: number) =>
+      `${(cx + r * Math.cos(a)).toFixed(2)} ${(cy + r * Math.sin(a)).toFixed(2)}`;
 
-    const px = (r: number, a: number) => (cx + r * Math.cos(a)).toFixed(2);
-    const py = (r: number, a: number) => (cy + r * Math.sin(a)).toFixed(2);
-
-    if (i === 0) {
-      pts.push(`M ${px(rRoot, gapStart)} ${py(rRoot, gapStart)}`);
-    } else {
-      pts.push(`L ${px(rRoot, gapStart)} ${py(rRoot, gapStart)}`);
-    }
-    pts.push(`L ${px(rRoot, rootLeft)}  ${py(rRoot, rootLeft)}`);
-    pts.push(`L ${px(rOuter, rootLeft)} ${py(rOuter, rootLeft)}`);
-    pts.push(`L ${px(rOuter, rootRight)} ${py(rOuter, rootRight)}`);
-    pts.push(`L ${px(rRoot, rootRight)} ${py(rRoot, rootRight)}`);
+    pts.push(i === 0 ? `M ${p(rRoot, gapStart)}` : `L ${p(rRoot, gapStart)}`);
+    pts.push(`L ${p(rRoot, rootLeft)} L ${p(rOuter, rootLeft)}`);
+    pts.push(`L ${p(rOuter, rootRight)} L ${p(rRoot, rootRight)}`);
   }
   pts.push("Z");
   return pts.join(" ");
 }
 
-/** Generate 4 spoke line endpoints */
+/** 4 spoke endpoints */
 function spokeLines(cx: number, cy: number, rHub: number, rRing: number) {
   return Array.from({ length: 4 }, (_, i) => {
     const a = (i / 4) * Math.PI * 2;
-    return {
-      x1: cx + rHub  * Math.cos(a),
-      y1: cy + rHub  * Math.sin(a),
-      x2: cx + rRing * Math.cos(a),
-      y2: cy + rRing * Math.sin(a),
-    };
+    return { x1: cx + rHub * Math.cos(a), y1: cy + rHub * Math.sin(a),
+             x2: cx + rRing * Math.cos(a), y2: cy + rRing * Math.sin(a) };
   });
 }
 
-// ---------------------------------------------------------------------------
-// Animation phases
-// ---------------------------------------------------------------------------
+// ── Animation phases ───────────────────────────────────────────────────────────
 type Phase = "idle" | "enter" | "rotate" | "labels";
-
-const EASE_OUT: [number, number, number, number] = [0, 0, 0.2, 1];
+const EASE_OUT:   [number, number, number, number] = [0, 0, 0.2, 1];
 const EASE_INOUT: [number, number, number, number] = [0.4, 0, 0.2, 1];
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
+// ── Component ──────────────────────────────────────────────────────────────────
 export function FeedbackLoopGears() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const shouldReduceMotion = useReducedMotion();
-
   const [phase, setPhase] = useState<Phase>("idle");
 
   useEffect(() => {
     if (!inView) return;
-    if (shouldReduceMotion) {
-      setPhase("labels");
-      return;
-    }
+    if (shouldReduceMotion) { setPhase("labels"); return; }
     setPhase("enter");
     const t1 = setTimeout(() => setPhase("rotate"), 800);
     const t2 = setTimeout(() => setPhase("labels"), 2900);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [inView, shouldReduceMotion]);
 
-  const gear1Path = useMemo(
-    () => gearPath(G1.cx, G1.cy, G1.N, G1.rOuter, G1.rRoot, G1_OFFSET),
-    []
-  );
-  const gear2Path = useMemo(
-    () => gearPath(G2.cx, G2.cy, G2.N, G2.rOuter, G2.rRoot, G2_OFFSET),
-    []
-  );
+  const gear1Path   = useMemo(() => gearPath(G1.cx, G1.cy, G1.N, G1.rOuter, G1.rRoot, G1_OFFSET), []);
+  const gear2Path   = useMemo(() => gearPath(G2.cx, G2.cy, G2.N, G2.rOuter, G2.rRoot, G2_OFFSET), []);
   const gear1Spokes = useMemo(() => spokeLines(G1.cx, G1.cy, G1.rHub, G1.rRing), []);
   const gear2Spokes = useMemo(() => spokeLines(G2.cx, G2.cy, G2.rHub, G2.rRing), []);
 
-  const isEntered  = phase === "enter"  || phase === "rotate" || phase === "labels";
+  const isEntered  = phase !== "idle";
   const isRotating = phase === "rotate" || phase === "labels";
   const showLabels = phase === "labels";
 
@@ -120,7 +87,6 @@ export function FeedbackLoopGears() {
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-        {/* Left: text */}
         <FadeIn>
           <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted-fg)] mb-4">
             The difference
@@ -141,123 +107,103 @@ export function FeedbackLoopGears() {
           </p>
         </FadeIn>
 
-        {/* Right: gear diagram */}
         <FadeIn delay={0.15}>
-          <div ref={ref} className="flex flex-col items-center gap-4">
+          <div ref={ref} className="flex flex-col items-center gap-5">
             <svg
-              viewBox="0 0 286 200"
+              viewBox="0 0 280 210"
               xmlns="http://www.w3.org/2000/svg"
-              className="w-full max-w-sm"
+              className="w-full max-w-xs"
               aria-hidden="true"
             >
               {/* ── Gear 1: Consulting (green) ── */}
-              {/* Outer entrance group handles x-slide */}
               <motion.g
-                initial={shouldReduceMotion ? { opacity: 1 } : { x: -40, opacity: 0 }}
+                initial={shouldReduceMotion ? { opacity: 1 } : { x: -36, opacity: 0 }}
                 animate={isEntered ? { x: 0, opacity: 1 } : {}}
-                transition={{ duration: 0.6, ease: EASE_OUT }}
+                transition={{ duration: 0.55, ease: EASE_OUT }}
               >
-                {/* Inner group handles rotation — origin at gear center */}
                 <motion.g
                   style={{ transformOrigin: `${G1.cx}px ${G1.cy}px` }}
                   animate={isRotating ? { rotate: 360 } : { rotate: 0 }}
-                  transition={
-                    isRotating
-                      ? { duration: 2.0, ease: EASE_INOUT }
-                      : { duration: 0 }
-                  }
+                  transition={isRotating ? { duration: 2.0, ease: EASE_INOUT } : { duration: 0 }}
                 >
-                  {/* Teeth outline */}
+                  {/* Gear body — filled at 9% + 2.5px stroke */}
                   <path
                     d={gear1Path}
                     stroke="var(--color-consulting)"
-                    strokeWidth="1.5"
-                    fill="none"
+                    strokeWidth={2.5}
+                    fill="var(--color-consulting)"
+                    fillOpacity={0.09}
                     strokeLinejoin="round"
                   />
-                  {/* Inner ring */}
+                  {/* Deliberate inner structural ring */}
                   <circle
                     cx={G1.cx} cy={G1.cy} r={G1.rRing}
                     stroke="var(--color-consulting)"
-                    strokeWidth="1"
+                    strokeWidth={1.5}
                     fill="none"
-                    opacity={0.4}
+                    opacity={0.55}
                   />
-                  {/* Hub */}
-                  <circle
-                    cx={G1.cx} cy={G1.cy} r={G1.rHub}
-                    stroke="var(--color-consulting)"
-                    strokeWidth="1.5"
-                    fill="none"
-                  />
-                  {/* Spokes */}
+                  {/* Spokes — background-colored to read as cutouts through fill */}
                   {gear1Spokes.map((s, i) => (
                     <line
                       key={i}
                       x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2}
-                      stroke="var(--color-consulting)"
-                      strokeWidth="1"
-                      opacity={0.5}
+                      stroke="var(--background)"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
                     />
                   ))}
+                  {/* Hub — solid fill */}
+                  <circle cx={G1.cx} cy={G1.cy} r={G1.rHub} fill="var(--color-consulting)" />
                 </motion.g>
               </motion.g>
 
               {/* ── Gear 2: Technologies (blue) ── */}
               <motion.g
-                initial={shouldReduceMotion ? { opacity: 1 } : { x: 40, opacity: 0 }}
+                initial={shouldReduceMotion ? { opacity: 1 } : { x: 36, opacity: 0 }}
                 animate={isEntered ? { x: 0, opacity: 1 } : {}}
-                transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : 0.2, ease: EASE_OUT }}
+                transition={{ duration: 0.55, delay: shouldReduceMotion ? 0 : 0.18, ease: EASE_OUT }}
               >
                 <motion.g
                   style={{ transformOrigin: `${G2.cx}px ${G2.cy}px` }}
                   animate={isRotating ? { rotate: -540 } : { rotate: 0 }}
-                  transition={
-                    isRotating
-                      ? { duration: 2.0, ease: EASE_INOUT }
-                      : { duration: 0 }
-                  }
+                  transition={isRotating ? { duration: 2.0, ease: EASE_INOUT } : { duration: 0 }}
                 >
                   <path
                     d={gear2Path}
                     stroke="var(--color-tech)"
-                    strokeWidth="1.5"
-                    fill="none"
+                    strokeWidth={2.5}
+                    fill="var(--color-tech)"
+                    fillOpacity={0.09}
                     strokeLinejoin="round"
                   />
                   <circle
                     cx={G2.cx} cy={G2.cy} r={G2.rRing}
                     stroke="var(--color-tech)"
-                    strokeWidth="1"
+                    strokeWidth={1.5}
                     fill="none"
-                    opacity={0.4}
-                  />
-                  <circle
-                    cx={G2.cx} cy={G2.cy} r={G2.rHub}
-                    stroke="var(--color-tech)"
-                    strokeWidth="1.5"
-                    fill="none"
+                    opacity={0.55}
                   />
                   {gear2Spokes.map((s, i) => (
                     <line
                       key={i}
                       x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2}
-                      stroke="var(--color-tech)"
-                      strokeWidth="1"
-                      opacity={0.5}
+                      stroke="var(--background)"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
                     />
                   ))}
+                  <circle cx={G2.cx} cy={G2.cy} r={G2.rHub} fill="var(--color-tech)" />
                 </motion.g>
               </motion.g>
             </svg>
 
-            {/* Labels */}
-            <div className="flex gap-20 sm:gap-28">
+            <div className="flex gap-24 sm:gap-32">
               <motion.p
                 className="text-xs font-medium uppercase tracking-widest text-consulting text-center"
                 initial={{ opacity: 0 }}
                 animate={showLabels ? { opacity: 1 } : {}}
-                transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : 0 }}
+                transition={{ duration: 0.3 }}
               >
                 Consulting
               </motion.p>
@@ -265,18 +211,17 @@ export function FeedbackLoopGears() {
                 className="text-xs font-medium uppercase tracking-widest text-tech text-center"
                 initial={{ opacity: 0 }}
                 animate={showLabels ? { opacity: 1 } : {}}
-                transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : 0.15 }}
+                transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : 0.12 }}
               >
                 Technologies
               </motion.p>
             </div>
 
-            {/* Caption */}
             <motion.p
               className="text-xs text-[var(--muted-fg)] text-center"
               initial={{ opacity: 0 }}
               animate={showLabels ? { opacity: 1 } : {}}
-              transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : 0.3 }}
+              transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : 0.25 }}
             >
               Each turn of one drives the other.
             </motion.p>

@@ -36,32 +36,16 @@ const SERVICES = [
 ];
 
 const STEPS = [
-  {
-    number: "01",
-    title: "Assess",
-    description: "We evaluate your current systems, workflows, and gaps.",
-  },
-  {
-    number: "02",
-    title: "Design",
-    description: "We recommend the right tools and system architecture.",
-  },
-  {
-    number: "03",
-    title: "Implement",
-    description: "We build, integrate, and deploy the solution.",
-  },
-  {
-    number: "04",
-    title: "Optimize",
-    description: "We refine and improve systems for long-term performance.",
-  },
+  { number: "01", title: "Assess",    description: "We evaluate your current systems, workflows, and gaps." },
+  { number: "02", title: "Design",    description: "We recommend the right tools and system architecture." },
+  { number: "03", title: "Implement", description: "We build, integrate, and deploy the solution." },
+  { number: "04", title: "Optimize",  description: "We refine and improve systems for long-term performance." },
 ];
 
 export default function ConsultingPage() {
   return (
     <>
-      {/* Hero */}
+      {/* Hero — page background */}
       <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <FadeIn>
@@ -81,42 +65,40 @@ export default function ConsultingPage() {
             <Button href="#contact" size="lg" variant="consulting">
               Start a Project
             </Button>
-
-            {/* Mobile visual — stacks below CTA, hidden on md+ */}
             <div className="md:hidden mt-10 flex justify-center">
               <div className="w-full max-w-[280px]">
                 <ConsultingHeroVisual delay={0.4} />
               </div>
             </div>
           </FadeIn>
-
-          {/* Desktop/tablet visual */}
           <div className="hidden md:flex items-center justify-center">
             <ConsultingHeroVisual />
           </div>
         </div>
       </section>
 
-      {/* Problem */}
-      <section className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <FadeIn>
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
-              Most systems don&apos;t break —{" "}
-              <span className="text-[var(--muted-fg)]">they slow you down.</span>
-            </h2>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <p className="text-[var(--muted-fg)] leading-relaxed text-lg">
-              Disconnected tools, manual processes, and messy data create friction
-              across your business. Teams spend more time working around systems
-              than benefiting from them.
-            </p>
-          </FadeIn>
+      {/* Problem — tinted */}
+      <div className="section-tinted border-t border-[var(--border)]">
+        <div className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <FadeIn>
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+                Most systems don&apos;t break —{" "}
+                <span className="text-[var(--muted-fg)]">they slow you down.</span>
+              </h2>
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              <p className="text-[var(--muted-fg)] leading-relaxed text-lg">
+                Disconnected tools, manual processes, and messy data create friction
+                across your business. Teams spend more time working around systems
+                than benefiting from them.
+              </p>
+            </FadeIn>
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* Solution */}
+      {/* Solution — page background */}
       <section className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <FadeIn>
@@ -134,87 +116,82 @@ export default function ConsultingPage() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <FadeIn className="mb-12">
-          <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted-fg)] mb-3">
-            Process
-          </p>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
-            How it works
-          </h2>
-        </FadeIn>
+      {/* How It Works — tinted */}
+      <div className="section-tinted border-t border-[var(--border)]">
+        <div className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <FadeIn className="mb-12">
+            <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted-fg)] mb-3">
+              Process
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">How it works</h2>
+          </FadeIn>
+          <FadeInStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--border)] rounded-xl overflow-hidden">
+            {STEPS.map((step) => (
+              <FadeInItem key={step.number}>
+                <div className="bg-[var(--surface)] p-8 h-full">
+                  <span className="font-mono text-xs text-consulting mb-6 block">{step.number}</span>
+                  <h3 className="font-semibold text-lg tracking-tight mb-2">{step.title}</h3>
+                  <p className="text-sm text-[var(--muted-fg)] leading-relaxed">{step.description}</p>
+                </div>
+              </FadeInItem>
+            ))}
+          </FadeInStagger>
+        </div>
+      </div>
 
-        <FadeInStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--border)] rounded-xl overflow-hidden">
-          {STEPS.map((step) => (
-            <FadeInItem key={step.number}>
-              <div className="bg-[var(--background)] p-8 h-full">
-                <span className="font-mono text-xs text-consulting mb-6 block">
-                  {step.number}
-                </span>
-                <h3 className="font-semibold text-lg tracking-tight mb-2">{step.title}</h3>
-                <p className="text-sm text-[var(--muted-fg)] leading-relaxed">
-                  {step.description}
-                </p>
-              </div>
-            </FadeInItem>
-          ))}
-        </FadeInStagger>
-      </section>
-
+      {/* Platform Logos — page background */}
       <PlatformLogos />
 
-      {/* Services */}
-      <section className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <FadeIn className="mb-12">
-          <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted-fg)] mb-3">
-            Services
-          </p>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
-            What we do
-          </h2>
-        </FadeIn>
-
-        <FadeInStagger className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[var(--border)] rounded-xl overflow-hidden">
-          {SERVICES.map((service) => (
-            <FadeInItem key={service.title}>
-              <div className="bg-[var(--background)] p-8 h-full">
-                <div className="flex items-center gap-2 mb-5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-consulting flex-shrink-0" aria-hidden="true" />
-                  <h3 className="font-semibold tracking-tight">{service.title}</h3>
+      {/* Services — tinted */}
+      <div className="section-tinted border-t border-[var(--border)]">
+        <div className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <FadeIn className="mb-12">
+            <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted-fg)] mb-3">
+              Services
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">What we do</h2>
+          </FadeIn>
+          <FadeInStagger className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[var(--border)] rounded-xl overflow-hidden">
+            {SERVICES.map((service) => (
+              <FadeInItem key={service.title}>
+                <div className="bg-[var(--surface)] p-8 h-full">
+                  <div className="flex items-center gap-2 mb-5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-consulting flex-shrink-0" aria-hidden="true" />
+                    <h3 className="font-semibold tracking-tight">{service.title}</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {service.items.map((item) => (
+                      <li key={item} className="text-sm text-[var(--muted-fg)] flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-[var(--muted-fg)] flex-shrink-0" aria-hidden="true" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-2">
-                  {service.items.map((item) => (
-                    <li
-                      key={item}
-                      className="text-sm text-[var(--muted-fg)] flex items-center gap-2"
-                    >
-                      <span className="w-1 h-1 rounded-full bg-[var(--muted-fg)] flex-shrink-0" aria-hidden="true" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </FadeInItem>
-          ))}
-        </FadeInStagger>
-      </section>
+              </FadeInItem>
+            ))}
+          </FadeInStagger>
+        </div>
+      </div>
 
+      {/* Engagement Models — page background (cards use --surface internally) */}
       <EngagementModels />
 
-      {/* Positioning pull-quote */}
-      <section className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <FadeIn>
-          <blockquote className="max-w-3xl">
-            <p className="text-2xl sm:text-3xl font-semibold tracking-tight leading-snug text-[var(--muted-fg)]">
-              &ldquo;We don&apos;t just implement systems — we partner with you to design,
-              build, and optimize them for long-term success.&rdquo;
-            </p>
-          </blockquote>
-        </FadeIn>
-      </section>
+      {/* Pull-quote — tinted */}
+      <div className="section-tinted border-t border-[var(--border)]">
+        <div className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <FadeIn>
+            <blockquote className="max-w-3xl">
+              <p className="text-2xl sm:text-3xl font-semibold tracking-tight leading-snug text-[var(--muted-fg)]">
+                &ldquo;We don&apos;t just implement systems — we partner with you to design,
+                build, and optimize them for long-term success.&rdquo;
+              </p>
+            </blockquote>
+          </FadeIn>
+        </div>
+      </div>
 
-      {/* Contact form */}
+      {/* Contact form — page background */}
       <section
         id="contact"
         className="border-t border-[var(--border)] py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"

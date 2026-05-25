@@ -18,7 +18,6 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      {/* JSON-LD Organization */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -34,26 +33,42 @@ export default function HomePage() {
                 "@type": "Organization",
                 name: "PG Technologies",
                 url: `${SITE_URL}/technologies`,
-                description:
-                  "Software, automation tools, and intelligent systems.",
+                description: "Software, automation tools, and intelligent systems.",
               },
               {
                 "@type": "Organization",
                 name: "PG Consulting",
                 url: `${SITE_URL}/consulting`,
-                description:
-                  "System design, implementation, and optimization for businesses.",
+                description: "System design, implementation, and optimization for businesses.",
               },
             ],
           }),
         }}
       />
+
+      {/* Hero — page background */}
       <HomeHero />
-      <DivisionPanels />
+
+      {/* DivisionPanels — tinted zone */}
+      <div className="section-tinted">
+        <DivisionPanels />
+      </div>
+
+      {/* Gears — page background */}
       <FeedbackLoopGears />
-      <RecentWork />
+
+      {/* RecentWork — tinted zone */}
+      <div className="section-tinted">
+        <RecentWork />
+      </div>
+
+      {/* Manifesto — page background */}
       <Manifesto />
-      <HomeCTA />
+
+      {/* HomeCTA — tinted zone */}
+      <div className="section-tinted">
+        <HomeCTA />
+      </div>
     </>
   );
 }
