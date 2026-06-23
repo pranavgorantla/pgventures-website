@@ -1,7 +1,7 @@
 # PG Ventures Website
 
-Production marketing site for **PG Ventures LLC** and its two divisions — PG Technologies and PG Consulting. Live at [pgventures.co](https://pgventures.co).
-
+Production marketing site for **PG Ventures LLC** and its two divisions — PG Technologies and PG Consulting. Live at [[pgventures.co](https://pgventures.co).
+](https://www.pgventures.co/)
 ---
 
 ## Tech Stack
